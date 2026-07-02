@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Kitchen Dashboard - CloudCuisine{% endblock %}
+
+{% block content %}
+<div class="kitchen-wrapper bg-dark min-vh-100">
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="text-white">
+                <h2 class="fw-bold mb-1"><i class="bi bi-fire me-2 text-warning"></i>Kitchen Dashboard</h2>
+                <p class="mb-0 text-secondary">Real-time order management</p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div id="connection-status" class="badge bg-success">
+                    <i class="bi bi-wifi me-1"></i>Connected
+                </div>
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light">
+                    <i class="bi bi-arrow-left me-2"></i>Admin Panel
+                </a>
+            </div>
+        </div>
+
+        <!-- Orders Columns -->
+        <div class="row g-4">
+            <!-- Pending Orders -->
+            <div class="col-lg-3">
+                <div class="card bg-secondary border-0 h-100">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock me-2"></i>Pending
+                            <span class="badge bg-dark ms-2" id="pending-count">{{ pending_orders|length }}</span>
+                        </h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 500px;" id="pending-orders">
+                        {% for order in pending_orders %}
+                        <div class="order-card card bg-dark text-white mb-3" data-order-id="{{ order.id }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <strong>#{{ order.id }}</strong>
+                                    <small class="text-secondary">{{ order.created_at.strftime('%H:%M') if order.created_at else 'Now' }}</small>
+                                </div>
+                                <p class="mb-2">{{ order.username }}</p>
+                                <p class="small text-secondary mb-3">Items: {{ order.items|length if order.items else 'N/A' }}</p>
+                                <strong class="text-warning">${{ order.grand_total }}</strong>
+                                <form action="{{ url_for('kitchen.start_preparing', order_id=order.id) }}" method="POST" class="mt-3">
+                                    <button type="submit" class="btn btn-warning btn-sm w-100">
+                                        <i class="bi bi-fire me-1"></i>Start Preparing
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center text-secondary py-4">
+                            <i class="bi bi-check-circle display-4"></i>
+                            <p class="mt-2">No pending orders</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preparing Orders -->
+            <div class="col-lg-3">
+                <div class="card bg-secondary border-0 h-100">
+                    <div class="card-header bg-info text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-fire me-2"></i>Preparing
+                            <span class="badge bg-dark ms-2" id="preparing-count">{{ preparing_orders|length }}</span>
+                        </h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 500px;" id="preparing-orders">
+                        {% for order in preparing_orders %}
+                        <div class="order-card card bg-dark text-white mb-3" data-order-id="{{ order.id }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <strong>#{{ order.id }}</strong>
+                                    <small class="text-secondary">{{ order.created_at.strftime('%H:%M') if order.created_at else 'Now' }}</small>
+                                </div>
+                                <p class="mb-2">{{ order.username }}</p>
+                                <p class="small text-secondary mb-3">Items: {{ order.items|length if order.items else 'N/A' }}</p>
+                                <strong class="text-info">${{ order.grand_total }}</strong>
+                                <form action="{{ url_for('kitchen.mark_ready', order_id=order.id) }}" method="POST" class="mt-3">
+                                    <button type="submit" class="btn btn-info btn-sm w-100">
+                                        <i class="bi bi-check-circle me-1"></i>Mark Ready
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center text-secondary py-4">
+                            <i class="bi bi-hourglass display-4"></i>
+                            <p class="mt-2">No preparing orders</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ready Orders -->
+            <div class="col-lg-3">
+                <div class="card bg-secondary border-0 h-100">
+                    <div class="card-header bg-success text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-check-circle me-2"></i>Ready
+                            <span class="badge bg-dark ms-2" id="ready-count">{{ ready_orders|length }}</span>
+                        </h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 500px;" id="ready-orders">
+                        {% for order in ready_orders %}
+                        <div class="order-card card bg-dark text-white mb-3" data-order-id="{{ order.id }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <strong>#{{ order.id }}</strong>
+                                    <small class="text-secondary">{{ order.created_at.strftime('%H:%M') if order.created_at else 'Now' }}</small>
+                                </div>
+                                <p class="mb-2">{{ order.username }}</p>
+                                <p class="small text-secondary mb-3">Items: {{ order.items|length if order.items else 'N/A' }}</p>
+                                <strong class="text-success">${{ order.grand_total }}</strong>
+                                <form action="{{ url_for('kitchen.complete_order', order_id=order.id) }}" method="POST" class="mt-3">
+                                    <button type="submit" class="btn btn-success btn-sm w-100">
+                                        <i class="bi bi-check-lg me-1"></i>Complete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center text-secondary py-4">
+                            <i class="bi bi-bag-check display-4"></i>
+                            <p class="mt-2">No ready orders</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Orders -->
+            <div class="col-lg-3">
+                <div class="card bg-secondary border-0 h-100">
+                    <div class="card-header bg-dark text-white border-secondary">
+                        <h5 class="mb-0">
+                            <i class="bi bi-check2-all me-2"></i>Completed
+                            <span class="badge bg-secondary ms-2" id="completed-count">{{ completed_orders|length }}</span>
+                        </h5>
+                    </div>
+                    <div class="card-body overflow-auto" style="max-height: 500px;" id="completed-orders">
+                        {% for order in completed_orders %}
+                        <div class="order-card card bg-success bg-opacity-10 text-white mb-3" data-order-id="{{ order.id }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <strong>#{{ order.id }}</strong>
+                                    <small class="text-secondary">{{ order.created_at.strftime('%H:%M') if order.created_at else 'Now' }}</small>
+                                </div>
+                                <p class="mb-2">{{ order.username }}</p>
+                                <p class="small text-secondary mb-3">Items: {{ order.items|length if order.items else 'N/A' }}</p>
+                                <strong class="text-success">${{ order.grand_total }}</strong>
+                                <div class="mt-3">
+                                    <span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Delivered</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center text-secondary py-4">
+                            <i class="bi bi-trophy display-4"></i>
+                            <p class="mt-2">No completed orders</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+// SocketIO connection
+const socket = io();
+
+// Connection events
+socket.on('connect', function() {
+    console.log('Connected to server');
+    document.getElementById('connection-status').classList.remove('bg-danger');
+    document.getElementById('connection-status').classList.add('bg-success');
+    document.getElementById('connection-status').innerHTML = '<i class="bi bi-wifi me-1"></i>Connected';
+    socket.emit('join_kitchen');
+});
+
+socket.on('disconnect', function() {
+    console.log('Disconnected from server');
+    document.getElementById('connection-status').classList.remove('bg-success');
+    document.getElementById('connection-status').classList.add('bg-danger');
+    document.getElementById('connection-status').innerHTML = '<i class="bi bi-wifi-off me-1"></i>Disconnected';
+});
+
+// New order notification
+socket.on('new_order', function(data) {
+    console.log('New order received:', data);
+
+    // Play notification sound
+    const audio = new Audio('/static/sounds/notification.mp3');
+    audio.play().catch(() => {});
+
+    // Show toast notification
+    showToast('New Order!', `Order #${data.order_id} from ${data.customer}`);
+
+    // Update pending count
+    const pendingCount = document.getElementById('pending-count');
+    if (pendingCount) {
+        pendingCount.textContent = parseInt(pendingCount.textContent) + 1;
+    }
+
+    // Optionally reload page to show new order
+    setTimeout(() => location.reload(), 2000);
+});
+
+// Order status update
+socket.on('order_update', function(data) {
+    console.log('Order update:', data);
+
+    // Update UI based on status
+    const orderId = data.order_id;
+    const status = data.status;
+
+    // Move order card to appropriate column
+    moveOrderCard(orderId, status);
+});
+
+// Toast notification
+function showToast(title, message) {
+    const toastHtml = `
+        <div class="toast show position-fixed" style="top: 20px; right: 20px; z-index: 9999;">
+            <div class="toast-header bg-warning">
+                <strong class="me-auto">${title}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">${message}</div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', toastHtml);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        const toasts = document.querySelectorAll('.toast');
+        toasts.forEach(t => t.remove());
+    }, 5000);
+}
+
+function moveOrderCard(orderId, status) {
+    // This would move the order card to the appropriate column
+    // For simplicity, we'll just reload the page
+    location.reload();
+}
+</script>
+{% endblock %}

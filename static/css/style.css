@@ -1,0 +1,714 @@
+/*
+ * CloudCuisine - Main Stylesheet
+ * A modern, responsive design for restaurant management
+ */
+
+/* ==================== CSS Variables ==================== */
+:root {
+    --primary: #3498db;
+    --primary-dark: #2980b9;
+    --secondary: #2c3e50;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --info: #17a2b8;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+    --gradient-primary: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+    --font-family: 'Poppins', sans-serif;
+    --font-display: 'Playfair Display', serif;
+}
+
+/* ==================== Base Styles ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ==================== Main Content ==================== */
+.main-content {
+    margin-top: 70px;
+    min-height: calc(100vh - 350px);
+}
+
+/* ==================== Navigation ==================== */
+.navbar {
+    background: var(--gradient-primary) !important;
+    padding: 12px 0;
+    transition: var(--transition);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff !important;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.02);
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    font-weight: 500;
+    padding: 8px 15px !important;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.nav-link:hover {
+    color: #fff !important;
+    background: rgba(255,255,255,0.1);
+}
+
+.nav-link.active {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ==================== Flash Messages ==================== */
+.flash-messages {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1050;
+    max-width: 350px;
+}
+
+.alert {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ==================== Hero Section ==================== */
+.hero-section {
+    min-height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1200') center/cover;
+    position: relative;
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.8) 0%, rgba(44, 62, 80, 0.9) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.hero-title {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+.hero-buttons .btn {
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 30px;
+}
+
+.hero-image {
+    max-width: 100%;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* ==================== Section Styles ==================== */
+.section-header {
+    margin-bottom: 40px;
+}
+
+.section-badge {
+    display: inline-block;
+    background: rgba(52, 152, 219, 0.1);
+    color: var(--primary);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ==================== Feature Cards ==================== */
+.feature-card {
+    padding: 30px 20px;
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 28px;
+    color: #fff;
+}
+
+.feature-card h5 {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* ==================== Food Cards ==================== */
+.food-card {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.food-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.food-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.food-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.food-card:hover .food-image img {
+    transform: scale(1.1);
+}
+
+.veg-badge, .non-veg-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.veg-badge {
+    color: #27ae60;
+}
+
+.non-veg-badge {
+    color: #e74c3c;
+}
+
+.unavailable-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.food-content {
+    padding: 20px;
+}
+
+.food-category {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.food-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 8px 0;
+    color: var(--secondary);
+}
+
+.food-description {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+}
+
+.food-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.food-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.food-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.prep-time {
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+/* ==================== Category Cards ==================== */
+.category-card {
+    display: block;
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.category-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.category-card h5 {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* ==================== Auth Pages ==================== */
+.auth-section {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.auth-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: var(--shadow-lg);
+}
+
+.auth-header i {
+    color: var(--primary);
+}
+
+.admin-auth {
+    border-top: 4px solid var(--warning);
+}
+
+.admin-icon-wrapper {
+    background: rgba(243, 156, 18, 0.1);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+.auth-divider {
+    text-align: center;
+    position: relative;
+    margin: 25px 0;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top: 1px solid #dee2e6;
+}
+
+.auth-divider span {
+    background: #fff;
+    padding: 0 15px;
+    position: relative;
+    color: #6c757d;
+}
+
+/* ==================== Dashboard Styles ==================== */
+.dashboard-page, .orders-page, .order-detail-page {
+    background: #f8f9fa;
+}
+
+.stat-card {
+    border-radius: 15px;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+}
+
+.stat-primary { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: #fff; }
+.stat-success { background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%); color: #fff; }
+.stat-info { background: linear-gradient(135deg, #17a2b8 0%, #117a8b 100%); color: #fff; }
+.stat-warning { background: linear-gradient(135deg, #f39c12 0%, #d68910 100%); color: #fff; }
+
+.icon-wrapper {
+    display: inline-block;
+}
+
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-initial {
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+/* ==================== Order Tracker ==================== */
+.order-tracker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.tracker-step {
+    text-align: center;
+    flex: 0 0 auto;
+}
+
+.tracker-step .step-icon {
+    width: 50px;
+    height: 50px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 20px;
+    color: #999;
+    transition: var(--transition);
+}
+
+.tracker-step.active .step-icon {
+    background: var(--primary);
+    color: #fff;
+}
+
+.tracker-step span {
+    font-size: 12px;
+    color: #999;
+}
+
+.tracker-step.active span {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.tracker-line {
+    flex: 1;
+    height: 4px;
+    background: #e0e0e0;
+    margin: 0 10px 30px;
+    border-radius: 2px;
+}
+
+.tracker-line.active {
+    background: var(--primary);
+}
+
+/* ==================== Kitchen Dashboard ==================== */
+.kitchen-wrapper, .admin-wrapper {
+    background: #f5f7fa;
+}
+
+.kitchen-wrapper .card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.kitchen-wrapper .order-card {
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+.kitchen-wrapper .order-card:hover {
+    transform: scale(1.02);
+}
+
+.fs-7 {
+    font-size: 0.75rem;
+}
+
+/* ==================== Cart & Checkout ==================== */
+.cart-page, .checkout-page {
+    background: #f8f9fa;
+}
+
+.empty-cart, .empty-orders {
+    background: #fff;
+    border-radius: 15px;
+    padding: 60px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ==================== Footer ==================== */
+.footer {
+    background: var(--secondary) !important;
+}
+
+.footer a:hover {
+    color: var(--primary) !important;
+}
+
+.social-links a:hover {
+    transform: translateY(-3px);
+    display: inline-block;
+}
+
+/* ==================== Responsive Adjustments ==================== */
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-image {
+        display: none;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-section {
+        padding: 100px 0 50px;
+        min-height: auto;
+    }
+
+    .auth-card {
+        padding: 25px;
+    }
+
+    .navbar-nav {
+        padding: 10px 0;
+    }
+
+    .nav-link {
+        padding: 8px 0 !important;
+    }
+
+    .order-tracker {
+        flex-wrap: wrap;
+    }
+
+    .tracker-line {
+        display: none;
+    }
+
+    .kitchen-wrapper .col-lg-3 {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .flash-messages {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    .hero-buttons .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* ==================== Utility Classes ==================== */
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-hover {
+    transition: var(--transition);
+}
+
+.shadow-hover:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==================== Loading States ==================== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==================== Print Styles ==================== */
+@media print {
+    .navbar, .footer, .flash-messages, .btn {
+        display: none !important;
+    }
+
+    .main-content {
+        margin-top: 0;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}

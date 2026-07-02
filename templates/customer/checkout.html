@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - CloudCuisine{% endblock %}
+
+{% block content %}
+<section class="checkout-page py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('customer.view_cart') }}">Cart</a></li>
+                <li class="breadcrumb-item active">Checkout</li>
+            </ol>
+        </nav>
+
+        <div class="section-header mb-4">
+            <h2><i class="bi bi-bag-check me-2"></i>Checkout</h2>
+        </div>
+
+        <div class="row">
+            <!-- Checkout Form -->
+            <div class="col-lg-7">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="bi bi-geo-alt me-2"></i>Delivery Address</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Delivery Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="3"
+                                          placeholder="Enter your complete delivery address" required>{{ user.address or '' }}</textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="special_instructions" class="form-label">Special Instructions (Optional)</label>
+                                <textarea class="form-control" id="special_instructions" name="special_instructions" rows="2"
+                                          placeholder="Any special instructions for delivery or preparation"></textarea>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <h5 class="mb-3"><i class="bi bi-credit-card me-2"></i>Payment Method</h5>
+
+                            <div class="row g-3">
+                                <div class="col-md-3 col-6">
+                                    <input type="radio" class="btn-check" name="payment_method" id="cash" value="cash" checked>
+                                    <label class="btn btn-outline-primary w-100 py-3" for="cash">
+                                        <i class="bi bi-cash d-block fs-4 mb-1"></i>
+                                        <span>Cash</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <input type="radio" class="btn-check" name="payment_method" id="card" value="card">
+                                    <label class="btn btn-outline-primary w-100 py-3" for="card">
+                                        <i class="bi bi-credit-card d-block fs-4 mb-1"></i>
+                                        <span>Card</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <input type="radio" class="btn-check" name="payment_method" id="upi" value="upi">
+                                    <label class="btn btn-outline-primary w-100 py-3" for="upi">
+                                        <i class="bi bi-phone d-block fs-4 mb-1"></i>
+                                        <span>UPI</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <input type="radio" class="btn-check" name="payment_method" id="netbanking" value="netbanking">
+                                    <label class="btn btn-outline-primary w-100 py-3" for="netbanking">
+                                        <i class="bi bi-bank d-block fs-4 mb-1"></i>
+                                        <span>Net Banking</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="mb-3">
+                                <label for="discount_code" class="form-label">Discount Code</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="discount_code" name="discount_code"
+                                           placeholder="Enter discount code">
+                                    <button class="btn btn-outline-secondary" type="button">Apply</button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                                <i class="bi bi-check-circle me-2"></i>Place Order
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Order Items -->
+                        <div class="order-items mb-3">
+                            {% for item in cart_items %}
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?auto=compress&cs=tinysrgb&w=60"
+                                     alt="{{ item.name }}" class="rounded me-3" width="50" height="50" style="object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">{{ item.name }}</h6>
+                                    <small class="text-muted">Qty: {{ item.quantity }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <strong>${{ item.subtotal }}</strong>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <hr>
+
+                        <!-- Price Breakdown -->
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <td class="text-muted">Subtotal</td>
+                                <td class="text-end">${{ subtotal }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">GST (18%)</td>
+                                <td class="text-end">${{ gst }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Service Charge (5%)</td>
+                                <td class="text-end">${{ service_charge }}</td>
+                            </tr>
+                            <tr class="fw-bold border-top">
+                                <td class="pt-3">Total</td>
+                                <td class="text-end pt-3 fs-5">${{ grand_total }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="card-footer bg-light">
+                        <div class="d-flex align-items-center text-success">
+                            <i class="bi bi-shield-check me-2 fs-5"></i>
+                            <div>
+                                <small>Secure Payment</small>
+                                <p class="mb-0 fw-medium">SSL Encrypted</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Info -->
+                <div class="card shadow-sm mt-3">
+                    <div class="card-body">
+                        <h6 class="mb-2">Customer Information</h6>
+                        <p class="mb-1"><strong>{{ user.username }}</strong></p>
+                        <p class="mb-1 text-muted"><i class="bi bi-envelope me-1"></i>{{ user.email }}</p>
+                        <p class="mb-0 text-muted"><i class="bi bi-phone me-1"></i>{{ user.phone or 'Not provided' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

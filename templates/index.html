@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}CloudCuisine - Fine Dining Experience{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-lg-6 hero-content">
+                <span class="hero-badge">Premium Quality Food</span>
+                <h1 class="hero-title">
+                    Delicious Food
+                    <span class="text-primary">Delivered Fresh</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Experience the finest cuisine crafted with passion and delivered to your doorstep.
+                    Order online for a seamless dining experience.
+                </p>
+                <div class="hero-buttons">
+                    <a href="{{ url_for('customer.menu') }}" class="btn btn-primary btn-lg me-3">
+                        <i class="bi bi-book-fill me-2"></i>View Menu
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-person-plus-fill me-2"></i>Join Now
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600"
+                     alt="Delicious Food" class="hero-image">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="feature-card text-center">
+                    <div class="feature-icon bg-primary">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <h5>Fast Delivery</h5>
+                    <p class="text-muted mb-0">30 min delivery</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="feature-card text-center">
+                    <div class="feature-icon bg-success">
+                        <i class="bi bi-award"></i>
+                    </div>
+                    <h5>Best Quality</h5>
+                    <p class="text-muted mb-0">Premium ingredients</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="feature-card text-center">
+                    <div class="feature-icon bg-warning">
+                        <i class="bi bi-star"></i>
+                    </div>
+                    <h5>Top Rated</h5>
+                    <p class="text-muted mb-0">4.9 customer rating</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="feature-card text-center">
+                    <div class="feature-icon bg-info">
+                        <i class="bi bi-headset"></i>
+                    </div>
+                    <h5>24/7 Support</h5>
+                    <p class="text-muted mb-0">Always available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Items Section -->
+<section class="featured-section py-5 bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">Our Specialties</span>
+            <h2 class="section-title">Featured Items</h2>
+            <p class="section-subtitle text-muted">Discover our most popular dishes</p>
+        </div>
+
+        <div class="row g-4">
+            {% for item in featured_items %}
+            <div class="col-lg-4 col-md-6">
+                <div class="food-card h-100">
+                    <div class="food-image">
+                        {% if item.image_url %}
+                        <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.name }}">
+                        {% else %}
+                        <img src="https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?auto=compress&cs=tinysrgb&w=400" alt="{{ item.name }}">
+                        {% endif %}
+                        {% if item.is_veg %}
+                        <span class="veg-badge"><i class="bi bi-check-circle-fill"></i> Veg</span>
+                        {% else %}
+                        <span class="non-veg-badge"><i class="bi bi-x-circle-fill"></i> Non-Veg</span>
+                        {% endif %}
+                    </div>
+                    <div class="food-content">
+                        <span class="food-category">{{ item.category_name }}</span>
+                        <h4 class="food-title">{{ item.name }}</h4>
+                        <p class="food-description">{{ item.description[:80] }}{% if item.description|length > 80 %}...{% endif %}</p>
+                        <div class="food-footer">
+                            <span class="food-price">${{ item.price }}</span>
+                            <a href="{{ url_for('customer.add_to_cart', item_id=item.id) }}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-cart-plus me-1"></i>Add
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No featured items available.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('customer.menu') }}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-arrow-right me-2"></i>View Full Menu
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">Explore</span>
+            <h2 class="section-title">Browse Categories</h2>
+            <p class="section-subtitle text-muted">Find exactly what you are craving</p>
+        </div>
+
+        <div class="row g-4">
+            {% for cat in categories %}
+            <div class="col-lg-3 col-md-4 col-6">
+                <a href="{{ url_for('customer.menu', category=cat.id) }}" class="category-card text-decoration-none">
+                    <div class="category-icon">
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <h5>{{ cat.name }}</h5>
+                    <p class="text-muted mb-0">View all items</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works py-5 bg-dark text-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge bg-primary">Easy Ordering</span>
+            <h2 class="section-title text-light">How It Works</h2>
+            <p class="section-subtitle text-muted">Order your favorite food in 3 easy steps</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <h5>Create Account</h5>
+                    <p class="text-muted">Sign up quickly and securely</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="bi bi-cart-check-fill"></i>
+                    </div>
+                    <h5>Choose & Order</h5>
+                    <p class="text-muted">Pick your favorites from our menu</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </div>
+                    <h5>Fast Delivery</h5>
+                    <p class="text-muted">Get food delivered to your door</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">Reviews</span>
+            <h2 class="section-title">What Our Customers Say</h2>
+            <p class="section-subtitle text-muted">Real reviews from happy food lovers</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"The best Indian food I've ever ordered online! The butter chicken was absolutely delicious. Highly recommended!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer" class="author-image">
+                        <div>
+                            <h6 class="mb-0">John Smith</h6>
+                            <small class="text-muted">Regular Customer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-half text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"Quick delivery and amazing quality! The packaging kept everything hot and fresh. Will definitely order again!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Customer" class="author-image">
+                        <div>
+                            <h6 class="mb-0">Sarah Johnson</h6>
+                            <small class="text-muted">Food Blogger</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"Great variety of dishes and the real-time order tracking is so convenient. Love this restaurant!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Customer" class="author-image">
+                        <div>
+                            <h6 class="mb-0">Mike Davis</h6>
+                            <small class="text-muted">Verified Buyer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-primary text-light">
+    <div class="container text-center">
+        <h2 class="mb-3">Ready to Order?</h2>
+        <p class="mb-4">Experience the best food delivery service in town</p>
+        <a href="{{ url_for('customer.menu') }}" class="btn btn-light btn-lg">
+            <i class="bi bi-bag-fill me-2"></i>Order Now
+        </a>
+    </div>
+</section>
+{% endblock %}

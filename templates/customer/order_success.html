@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Order Success - CloudCuisine{% endblock %}
+
+{% block content %}
+<section class="order-success-page py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center">
+                <div class="success-animation">
+                    <i class="bi bi-check-circle-fill text-success display-1"></i>
+                </div>
+
+                <h1 class="mt-4">Order Placed Successfully!</h1>
+                <p class="lead text-muted mb-4">
+                    Thank you for your order. Your delicious food is being prepared.
+                </p>
+
+                <div class="order-info-card card shadow-sm mb-4 text-start">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Order Number</span>
+                            <strong class="fs-5">#{{ order.id }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Status</span>
+                            <span class="badge bg-warning">{{ order.status|title }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Total Amount</span>
+                            <strong>${{ order.grand_total }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Order Time</span>
+                            <span>{{ order.created_at.strftime('%B %d, %Y %I:%M %p') if order.created_at else 'Now' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    You will receive updates about your order status. Track your order in your dashboard.
+                </div>
+
+                <div class="d-grid gap-3 d-md-flex justify-content-center">
+                    <a href="{{ url_for('customer.order_detail', order_id=order.id) }}" class="btn btn-outline-primary">
+                        <i class="bi bi-eye me-2"></i>View Order Details
+                    </a>
+                    <a href="{{ url_for('customer.download_invoice', order_id=order.id) }}" class="btn btn-primary">
+                        <i class="bi bi-download me-2"></i>Download Invoice
+                    </a>
+                </div>
+
+                <hr class="my-4">
+
+                <a href="{{ url_for('customer.menu') }}" class="btn btn-link">
+                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if session.get('user_id') %}
+<!-- Order Status Tracker -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Order Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="order-tracker">
+                        <div class="tracker-step active">
+                            <div class="step-icon">
+                                <i class="bi bi-bag-check"></i>
+                            </div>
+                            <span>Order Placed</span>
+                        </div>
+                        <div class="tracker-line active"></div>
+                        <div class="tracker-step {% if order.status in ['preparing', 'ready', 'completed'] %}active{% endif %}">
+                            <div class="step-icon">
+                                <i class="bi bi-fire"></i>
+                            </div>
+                            <span>Preparing</span>
+                        </div>
+                        <div class="tracker-line {% if order.status in ['ready', 'completed'] %}active{% endif %}"></div>
+                        <div class="tracker-step {% if order.status in ['ready', 'completed'] %}active{% endif %}">
+                            <div class="step-icon">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <span>Ready</span>
+                        </div>
+                        <div class="tracker-line {% if order.status == 'completed' %}active{% endif %}"></div>
+                        <div class="tracker-step {% if order.status == 'completed' %}active{% endif %}">
+                            <div class="step-icon">
+                                <i class="bi bi-house-check"></i>
+                            </div>
+                            <span>Delivered</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
