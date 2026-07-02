@@ -193,7 +193,7 @@ class FoodItem:
         params = []
 
         if active_only:
-            :
+            
             conditions.append("fi.is_available = TRUE")
 
         if category_id:
